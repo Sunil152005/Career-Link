@@ -234,3 +234,4 @@ The project begins with the candidate registration and login foundation. HR mana
 **Sunil Jadhav**
 
 - GitHub: https://github.com/Sunil152005
+- Project Repository: https://github.com/Sunil152005/Career-Link
