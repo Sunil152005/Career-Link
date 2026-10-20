@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
@@ -100,15 +100,7 @@
                     <span>Sign in with Google</span>
                 </button>
 
-                <!-- 2. LinkedIn Button -->
-                <button type="button" class="btn-pill-auth btn-pill-linkedin" onclick="startLinkedInAuth()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                    </svg>
-                    <span>Sign in with LinkedIn</span>
-                </button>
-
-                <!-- 3. Toggle Email Sign In Form -->
+                <!-- 2. Toggle Email Sign In Form -->
                 <button type="button" class="btn-pill-auth btn-pill-email" id="btnToggleEmailForm" onclick="toggleEmailSection()">
                     <i class="fa-regular fa-envelope me-1"></i>
                     <span>Sign in with Email</span>
@@ -320,65 +312,7 @@
         </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- LINKEDIN OAUTH AUTHENTICATION MODAL                                       -->
-    <!-- ========================================================================= -->
-    <div class="modal fade" id="linkedinAuthModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
-            <div class="modal-content modal-content-glass">
-                <div class="modal-header border-bottom">
-                    <div class="d-flex align-items-center gap-2">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#0a66c2">
-                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                        </svg>
-                        <h5 class="modal-title fw-bold mb-0">LinkedIn Sign In</h5>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="oauth-auth" method="post" id="linkedinOAuthForm">
-                    <input type="hidden" name="provider" value="linkedin">
-                    <input type="hidden" name="roleType" id="linkedinRoleType" value="candidate">
 
-                    <div class="modal-body p-4">
-                        <div class="text-center mb-4">
-                            <h5 class="fw-bold mb-1">Sign in to CareerLink</h5>
-                            <p class="text-secondary small">Authenticate using your LinkedIn credentials</p>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label-custom">Email or Phone <span class="text-danger">*</span></label>
-                            <input type="text" name="email" id="linkedinEmailInput" class="form-control form-control-glass" value="seeker1@gmail.com" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label-custom">Password <span class="text-danger">*</span></label>
-                            <div class="input-group-password">
-                                <input type="password" name="password" id="linkedinPasswordInput" class="form-control form-control-glass" placeholder="••••••••" required>
-                                <button type="button" class="password-toggle-btn" onclick="togglePassword('linkedinPasswordInput', this)">
-                                    <i class="fa-solid fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label-custom">Display Name</label>
-                            <input type="text" name="name" id="linkedinNameInput" class="form-control form-control-glass" value="Sunil Jadhav" required>
-                        </div>
-
-                        <div class="p-3 bg-indigo-soft rounded-3 small text-secondary">
-                            <i class="fa-solid fa-shield-halved me-1 text-indigo"></i> <strong>Encrypted Security:</strong> Identity credential verified with official OAuth provider.
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn-secondary-premium" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn-premium" style="background: #0a66c2; border-color: #0a66c2;">
-                            <i class="fa-brands fa-linkedin me-1"></i>Sign In with LinkedIn
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="py-4 text-center text-muted mt-auto" style="border-top: 1px solid var(--border-glass);">
@@ -411,7 +345,6 @@
 
             // Update modal hidden inputs
             document.getElementById('googleRoleType').value = role;
-            document.getElementById('linkedinRoleType').value = role;
 
             if (role === 'admin') {
                 emailLabel.innerText = "Admin Username";
@@ -433,8 +366,6 @@
                 document.getElementById('googleRoleName').innerText = "HR Manager";
                 document.getElementById('googleRoleEmail').innerText = "hr@infosys.com";
                 document.getElementById('googleRoleAvatar').innerText = "H";
-                document.getElementById('linkedinEmailInput').value = "hr@infosys.com";
-                document.getElementById('linkedinNameInput').value = "Sarah Jenkins";
             } else {
                 emailLabel.innerText = "Email Address";
                 emailInput.placeholder = "name@example.com";
@@ -448,8 +379,6 @@
                 document.getElementById('googleRoleName').innerText = "Aditya Bhosale";
                 document.getElementById('googleRoleEmail').innerText = "seeker1@gmail.com";
                 document.getElementById('googleRoleAvatar').innerText = "A";
-                document.getElementById('linkedinEmailInput').value = "seeker1@gmail.com";
-                document.getElementById('linkedinNameInput').value = "Aditya Bhosale";
             }
         }
 
@@ -524,13 +453,7 @@
             document.getElementById('googleProfileUrlPreview').innerText = 'careerlink.com/' + cleanName;
         }
 
-        // ==========================================
-        // LinkedIn OAuth Modal Functions
-        // ==========================================
-        function startLinkedInAuth() {
-            const modal = new bootstrap.Modal(document.getElementById('linkedinAuthModal'));
-            modal.show();
-        }
+
 
         // Initialize based on URL queries
         window.addEventListener('load', () => {

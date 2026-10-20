@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.careerlink.dao.JobPostDAO" %>
 <% 
@@ -128,9 +128,19 @@
         <div class="container-fluid animate-fade-in" style="max-width: 860px;">
 
             <div class="mb-4">
-                <h2><%= isEdit ? "Edit Job Posting" : "Create Job Opportunity" %></h2>
-                <p class="text-secondary small">Provide specific details to attract matching candidates for your team</p>
+                <h2><%= isEdit ? "Edit Job Posting" : "Request New Job Posting" %></h2>
+                <p class="text-secondary small">Provide specific details for administrative review and candidate matching</p>
             </div>
+
+            <% if (!isEdit) { %>
+                <div class="alert alert-info border-0 mb-4 d-flex align-items-center shadow-sm" style="background: rgba(79, 70, 229, 0.08); border-radius: 12px; border-left: 4px solid #4f46e5 !important;">
+                    <i class="fa-solid fa-circle-info fs-4 text-indigo me-3"></i>
+                    <div>
+                        <strong class="text-indigo">Admin Approval Workflow:</strong>
+                        <div class="small text-secondary mt-1">This job posting will be submitted as a formal request to the Platform Administrator. Once approved by the Admin, the job will immediately become <strong>Active</strong> and visible to all candidates across CareerLink.</div>
+                    </div>
+                </div>
+            <% } %>
 
             <!-- Post Job Form -->
             <div class="glass-panel p-4 p-md-5">
@@ -185,7 +195,7 @@
                         <div class="col-12 text-end mt-4">
                             <a href="jobs.jsp" class="btn-secondary-premium me-2 py-3 px-4">Cancel</a>
                             <button type="submit" class="btn-premium py-3 px-5">
-                                <i class="fa-solid fa-cloud-arrow-up me-2"></i><%= isEdit ? "Save Changes" : "Publish Job" %>
+                                <i class="fa-solid <%= isEdit ? "fa-floppy-disk" : "fa-paper-plane" %> me-2"></i><%= isEdit ? "Save Changes" : "Submit Request to Admin" %>
                             </button>
                         </div>
                     </div>

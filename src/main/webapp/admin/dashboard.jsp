@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.careerlink.dao.CandidateDAO" %>
 <%@ page import="com.careerlink.dao.HRDAO" %>
 <%@ page import="com.careerlink.dao.JobPostDAO" %>
@@ -18,8 +18,9 @@
     int totalCandidates = candidateDao.listAllCandidates().size();
     int totalHR = hrDao.listAllHR().size();
     int activeJobs = jobDao.countActiveJobs();
+    int pendingJobs = jobDao.countPendingJobs();
     int closedJobs = jobDao.countClosedJobs();
-    int totalJobs = activeJobs + closedJobs;
+    int totalJobs = activeJobs + closedJobs + pendingJobs;
     int totalApplications = appDao.countApplications();
 %>
 <!DOCTYPE html>
@@ -101,6 +102,9 @@
             </a>
             <a href="jobs.jsp" class="sidebar-link">
                 <i class="fa-solid fa-briefcase"></i>Monitor Jobs
+                <% if (pendingJobs > 0) { %>
+                    <span class="badge bg-warning text-dark ms-auto fw-bold"><%= pendingJobs %></span>
+                <% } %>
             </a>
             <a href="messages.jsp" class="sidebar-link">
                 <i class="fa-solid fa-headset"></i>Support Inquiries
@@ -125,6 +129,17 @@
                     </div>
                 <% } %>
 
+                <!-- Pending Approval Alert Notice if pending > 0 -->
+                <% if (pendingJobs > 0) { %>
+                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center justify-content-between mb-4" style="background: rgba(245, 158, 11, 0.12); border-left: 4px solid #f59e0b !important; border-radius: 12px;">
+                        <div>
+                            <i class="fa-solid fa-bell text-warning fs-5 me-2"></i>
+                            <strong><%= pendingJobs %> Recruiter Job Post Request(s) Awaiting Approval!</strong> Review and approve new job requisitions so they become active on CareerLink.
+                        </div>
+                        <a href="jobs.jsp?filter=pending" class="btn btn-warning btn-sm fw-bold px-3 py-1 text-dark">Review Requests &rarr;</a>
+                    </div>
+                <% } %>
+
                 <!-- Stats Grid -->
                 <div class="row g-4 mb-4">
                     <div class="col-md-6 col-lg-4 col-xl-2">
@@ -142,24 +157,31 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4 col-xl-2">
-                        <div class="glass-panel stat-card success h-100">
-                            <div class="text-secondary small fw-bold uppercase">Active Jobs</div>
-                            <div class="stat-value"><%= activeJobs %></div>
-                            <div class="text-success small"><a href="jobs.jsp" class="text-success text-decoration-none">Audit &rarr;</a></div>
+                        <div class="glass-panel stat-card warning h-100" style="--warning-glow: rgba(245, 158, 11, 0.35);">
+                            <div class="text-secondary small fw-bold uppercase">Pending Requests</div>
+                            <div class="stat-value"><%= pendingJobs %></div>
+                            <div class="text-warning small"><a href="jobs.jsp?filter=pending" class="text-warning text-decoration-none fw-bold">Review &rarr;</a></div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4 col-xl-2">
-                        <div class="glass-panel stat-card warning h-100" style="--warning-glow: rgba(245, 158, 11, 0.35);">
-                            <div class="text-secondary small fw-bold uppercase">Closed Jobs</div>
-                            <div class="stat-value"><%= closedJobs %></div>
-                            <div class="text-warning small"><a href="jobs.jsp" class="text-warning text-decoration-none">Audit &rarr;</a></div>
+                        <div class="glass-panel stat-card success h-100">
+                            <div class="text-secondary small fw-bold uppercase">Active Jobs</div>
+                            <div class="stat-value"><%= activeJobs %></div>
+                            <div class="text-success small"><a href="jobs.jsp?filter=active" class="text-success text-decoration-none">Audit &rarr;</a></div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 col-xl-4">
+                    <div class="col-md-6 col-lg-4 col-xl-2">
+                        <div class="glass-panel stat-card danger h-100" style="--danger-glow: rgba(239, 68, 68, 0.35);">
+                            <div class="text-secondary small fw-bold uppercase">Closed / Rejected</div>
+                            <div class="stat-value"><%= closedJobs %></div>
+                            <div class="text-danger small"><a href="jobs.jsp?filter=rejected" class="text-danger text-decoration-none">Audit &rarr;</a></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-xl-2">
                         <div class="glass-panel stat-card info h-100" style="--info-glow: rgba(6, 182, 212, 0.35);">
-                            <div class="text-secondary small fw-bold uppercase">Total Applications</div>
+                            <div class="text-secondary small fw-bold uppercase">Applications</div>
                             <div class="stat-value"><%= totalApplications %></div>
-                            <div class="text-info small"><i class="fa-solid fa-clock-rotate-left"></i> Global system count</div>
+                            <div class="text-info small"><i class="fa-solid fa-clock-rotate-left"></i> System count</div>
                         </div>
                     </div>
                 </div>

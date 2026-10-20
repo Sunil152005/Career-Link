@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.careerlink.dao.JobPostDAO" %>
@@ -120,10 +120,28 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <div>
                     <h2>Manage Opportunities</h2>
-                    <p class="text-secondary small mb-0">Review, update, or remove active recruitment postings</p>
+                    <p class="text-secondary small mb-0">Track, update, or create job requisition requests for administrative approval</p>
                 </div>
-                <a href="post-job.jsp" class="btn-premium py-2 px-4"><i class="fa-solid fa-plus me-2"></i>Create New Post</a>
+                <a href="post-job.jsp" class="btn-premium py-2 px-4"><i class="fa-solid fa-plus me-2"></i>Post a Job</a>
             </div>
+
+            <% if ("submitted".equals(request.getParameter("submitted"))) { %>
+                <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert" style="background: rgba(16, 185, 129, 0.15); border-left: 4px solid #10b981 !important;">
+                    <i class="fa-solid fa-circle-check text-success me-2 fs-5"></i>
+                    <strong>Job Post Request Submitted!</strong> Your job post has been sent to the Admin for approval. It will become <strong>Active</strong> as soon as the Admin approves it.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% } else if ("updated".equals(request.getParameter("updated"))) { %>
+                <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                    <i class="fa-solid fa-circle-check text-success me-2"></i>Job posting details updated successfully.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% } else if ("deleted".equals(request.getParameter("deleted"))) { %>
+                <div class="alert alert-info alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                    <i class="fa-solid fa-trash text-danger me-2"></i>Job post has been deleted.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% } %>
 
             <!-- Jobs Table List -->
             <div class="glass-panel p-4">
@@ -131,7 +149,7 @@
                     <div class="text-center py-5">
                         <i class="fa-solid fa-folder-open text-muted fs-1 mb-3"></i>
                         <h4>No Jobs Posted Yet</h4>
-                        <p class="text-secondary mb-4">Launch your first job requisition to attract candidates.</p>
+                        <p class="text-secondary mb-4">Submit your first job requisition to attract qualified talent.</p>
                         <a href="post-job.jsp" class="btn-premium">Post a Job Now</a>
                     </div>
                 <% } else { %>
@@ -144,12 +162,15 @@
                                     <th>Location</th>
                                     <th>Salary (Annum)</th>
                                     <th>Deadline Date</th>
+                                    <th>Approval Status</th>
                                     <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% for (Map<String, Object> job : myJobs) {
                                     int jobId = (Integer) job.get("jobId");
+                                    String status = (String) job.get("status");
+                                    if (status == null) status = "Active";
                                 %>
                                     <tr>
                                         <td class="text-secondary small">#<%= jobId %></td>
@@ -157,6 +178,23 @@
                                         <td><span class="text-secondary"><i class="fa-solid fa-location-dot me-1 text-danger"></i><%= job.get("location") %></span></td>
                                         <td>$<%= String.format("%,.2f", job.get("salary")) %></td>
                                         <td class="text-secondary"><%= job.get("lastDate") %></td>
+                                        <td>
+                                            <% if ("Pending".equalsIgnoreCase(status)) { %>
+                                                <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3); padding: 6px 12px; border-radius: 20px; font-weight: 600;">
+                                                    <i class="fa-solid fa-clock-rotate-left me-1"></i>Pending Admin Approval
+                                                </span>
+                                            <% } else if ("Active".equalsIgnoreCase(status)) { %>
+                                                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); padding: 6px 12px; border-radius: 20px; font-weight: 600;">
+                                                    <i class="fa-solid fa-circle-check me-1"></i>Active
+                                                </span>
+                                            <% } else if ("Rejected".equalsIgnoreCase(status)) { %>
+                                                <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.3); padding: 6px 12px; border-radius: 20px; font-weight: 600;">
+                                                    <i class="fa-solid fa-circle-xmark me-1"></i>Rejected
+                                                </span>
+                                            <% } else { %>
+                                                <span class="badge bg-secondary"><%= status %></span>
+                                            <% } %>
+                                        </td>
                                         <td class="text-end">
                                             <div class="d-inline-flex gap-2">
                                                 <a href="post-job.jsp?jobId=<%= jobId %>" class="btn-secondary-premium py-1 px-3 small" style="font-size: 13px;">

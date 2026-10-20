@@ -37,6 +37,12 @@ public class ApplicationServlet extends HttpServlet {
                 return;
             }
             int jobId = Integer.parseInt(request.getParameter("jobId"));
+            com.careerlink.dao.JobPostDAO jobDao = new com.careerlink.dao.JobPostDAO();
+            java.util.Map<String, Object> job = jobDao.getJobById(jobId);
+            if (job == null || !"Active".equalsIgnoreCase((String) job.get("status"))) {
+                response.sendRedirect("candidate/jobs.jsp?error=job_not_active");
+                return;
+            }
             boolean success = appDao.applyForJob(candidate.getCandidateId(), jobId);
 
             if (success) {

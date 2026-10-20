@@ -223,6 +223,7 @@ CREATE TABLE `job_post` (
   `salary` decimal(12,2) DEFAULT NULL,
   `location` varchar(150) DEFAULT NULL,
   `last_date` date DEFAULT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Pending',
   PRIMARY KEY (`job_id`),
   KEY `hr_id` (`hr_id`),
   CONSTRAINT `job_post_ibfk_1` FOREIGN KEY (`hr_id`) REFERENCES `hr` (`hr_id`)
@@ -235,7 +236,7 @@ CREATE TABLE `job_post` (
 
 LOCK TABLES `job_post` WRITE;
 /*!40000 ALTER TABLE `job_post` DISABLE KEYS */;
-INSERT INTO `job_post` VALUES (1,3,'Java Developer','Requirement of sufficient knowledge of Java.','HTML, CSS, JavaScript, MySQL, Java, AI, ML.','B.Tech Third Year - last year','0',50000.00,'Narhe, Pune','2026-12-12');
+INSERT INTO `job_post` VALUES (1,3,'Java Developer','Requirement of sufficient knowledge of Java.','HTML, CSS, JavaScript, MySQL, Java, AI, ML.','B.Tech Third Year - last year','0',50000.00,'Narhe, Pune','2026-12-12','Active');
 /*!40000 ALTER TABLE `job_post` ENABLE KEYS */;
 UNLOCK TABLES;
 

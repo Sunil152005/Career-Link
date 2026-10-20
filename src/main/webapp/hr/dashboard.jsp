@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -27,6 +27,8 @@
     List<Map<String, Object>> interviews = interviewDao.getInterviewsByHR(hrId);
 
     int totalJobs = myJobs.size();
+    int activeJobsCount = jobDao.countActiveJobsByHR(hrId);
+    int pendingJobsCount = jobDao.countPendingJobsByHR(hrId);
     int totalApplicants = applicants.size();
     int totalInterviews = interviews.size();
 
@@ -149,25 +151,32 @@
 
             <!-- Stats Grid -->
             <div class="row g-4 mb-4">
-                <div class="col-md-6 col-lg-4">
+                <div class="col-md-6 col-lg-3">
                     <div class="glass-panel stat-card primary">
                         <div class="text-secondary small fw-bold uppercase">Active Postings</div>
-                        <div class="stat-value"><%= totalJobs %></div>
-                        <div class="text-indigo small"><a href="jobs.jsp" class="text-indigo text-decoration-none fw-semibold">Manage Vacancies &rarr;</a></div>
+                        <div class="stat-value"><%= activeJobsCount %></div>
+                        <div class="text-indigo small"><a href="jobs.jsp" class="text-indigo text-decoration-none fw-semibold">View Active &rarr;</a></div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="glass-panel stat-card warning">
+                        <div class="text-secondary small fw-bold uppercase">Pending Approval</div>
+                        <div class="stat-value"><%= pendingJobsCount %></div>
+                        <div class="text-warning small"><a href="jobs.jsp" class="text-warning text-decoration-none fw-semibold">Track Requests &rarr;</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
                     <div class="glass-panel stat-card secondary">
-                        <div class="text-secondary small fw-bold uppercase">Applications Received</div>
+                        <div class="text-secondary small fw-bold uppercase">Applications</div>
                         <div class="stat-value"><%= totalApplicants %></div>
                         <div class="text-violet small"><a href="applicants.jsp" class="text-violet text-decoration-none fw-semibold">Review Resumes &rarr;</a></div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
+                <div class="col-md-6 col-lg-3">
                     <div class="glass-panel stat-card accent">
-                        <div class="text-secondary small fw-bold uppercase">Scheduled Interviews</div>
+                        <div class="text-secondary small fw-bold uppercase">Interviews</div>
                         <div class="stat-value"><%= totalInterviews %></div>
-                        <div class="text-pink small"><a href="interviews.jsp" class="text-pink text-decoration-none fw-semibold">View Interview Calendar &rarr;</a></div>
+                        <div class="text-pink small"><a href="interviews.jsp" class="text-pink text-decoration-none fw-semibold">View Calendar &rarr;</a></div>
                     </div>
                 </div>
             </div>

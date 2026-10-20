@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.careerlink.model.Candidate" %>
 <%@ page import="com.careerlink.dao.JobPostDAO" %>
 <%@ page import="com.careerlink.dao.ApplicationDAO" %>
@@ -22,7 +22,7 @@
     if (searchQuery != null && !searchQuery.trim().isEmpty()) {
         jobs = jobDao.searchJobs(searchQuery);
     } else {
-        jobs = jobDao.listAllJobs();
+        jobs = jobDao.listActiveJobs();
     }
 
     ApplicationDAO appDao = new ApplicationDAO();
@@ -133,6 +133,10 @@
             <% if ("already_applied".equals(request.getParameter("error"))) { %>
                 <div class="alert alert-warning border-0 mb-4" role="alert">
                     <i class="fa-solid fa-triangle-exclamation me-2"></i>You have already applied to this job posting.
+                </div>
+            <% } else if ("job_not_active".equals(request.getParameter("error"))) { %>
+                <div class="alert alert-danger border-0 mb-4" role="alert">
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>This job opportunity is pending admin approval or is no longer active.
                 </div>
             <% } %>
 

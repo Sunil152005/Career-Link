@@ -48,7 +48,7 @@ public class JobServlet extends HttpServlet {
             boolean success = jobDao.addJob(hrId, title, description, skills, qualification, experience, salary, location, lastDate);
 
             if (success) {
-                response.sendRedirect("hr/jobs.jsp");
+                response.sendRedirect("hr/jobs.jsp?submitted=true");
             } else {
                 request.setAttribute("errorMessage", "Failed to add job post");
                 request.getRequestDispatcher("hr/post-job.jsp").forward(request, response);
@@ -71,7 +71,7 @@ public class JobServlet extends HttpServlet {
             boolean success = jobDao.updateJob(jobId, title, description, skills, qualification, experience, salary, location, lastDate);
 
             if (success) {
-                response.sendRedirect("hr/jobs.jsp");
+                response.sendRedirect("hr/jobs.jsp?updated=true");
             } else {
                 request.setAttribute("errorMessage", "Failed to update job post");
                 request.getRequestDispatcher("hr/post-job.jsp?jobId=" + jobId).forward(request, response);
@@ -99,10 +99,27 @@ public class JobServlet extends HttpServlet {
             jobDao.deleteJob(jobId);
             
             if ("ADMIN".equals(role)) {
-                response.sendRedirect("admin/jobs.jsp");
+                response.sendRedirect("admin/jobs.jsp?deleted=true");
             } else {
-                response.sendRedirect("hr/jobs.jsp");
+                response.sendRedirect("hr/jobs.jsp?deleted=true");
             }
+        } else if ("approve".equalsIgnoreCase(action)) {
+            if (!"ADMIN".equals(role)) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            int jobId = Integer.parseInt(request.getParameter("jobId"));
+            jobDao.approveJob(jobId);
+            response.sendRedirect("admin/jobs.jsp?approved=true&jobId=" + jobId);
+
+        } else if ("reject".equalsIgnoreCase(action)) {
+            if (!"ADMIN".equals(role)) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            int jobId = Integer.parseInt(request.getParameter("jobId"));
+            jobDao.rejectJob(jobId);
+            response.sendRedirect("admin/jobs.jsp?rejected=true&jobId=" + jobId);
         }
     }
 }
